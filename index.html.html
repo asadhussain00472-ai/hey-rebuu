@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>a question for you</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Dancing+Script:wght@600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blush:#fdeef1;
+    --cream:#fffaf5;
+    --rose:#c9527a;
+    --rose-deep:#9c3b60;
+    --plum:#3a2233;
+    --gold:#d9a066;
+    --line:#f0d7de;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    font-family:'Quicksand',sans-serif;
+    background:
+      radial-gradient(circle at 15% 10%, #fff5f7 0%, transparent 45%),
+      radial-gradient(circle at 85% 90%, #fbe4ea 0%, transparent 50%),
+      var(--blush);
+    color:var(--plum);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow-x:hidden;
+    padding:24px;
+  }
+  .stage{
+    position:relative;
+    width:100%;
+    max-width:440px;
+  }
+  .page{
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    background:var(--cream);
+    border:1px solid var(--line);
+    border-radius:28px;
+    padding:40px 30px 34px;
+    box-shadow:0 20px 60px -20px rgba(156,59,96,0.35);
+    animation:rise .5s ease both;
+  }
+  .page.active{display:flex;}
+  @keyframes rise{
+    from{opacity:0; transform:translateY(16px) scale(.98);}
+    to{opacity:1; transform:translateY(0) scale(1);}
+  }
+  .eyebrow{
+    font-size:12px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--rose);
+    font-weight:600;
+    margin-bottom:14px;
+  }
+  .pic{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #ffe1ea, #f3a8bf 60%, var(--rose) 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:22px;
+    box-shadow:0 10px 26px -10px rgba(201,82,122,.55), inset 0 0 0 5px #fff;
+  }
+  .pic svg{width:52px;height:52px;}
+  h1{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:600;
+    font-size:28px;
+    line-height:1.3;
+    margin:0 0 8px;
+    color:var(--plum);
+  }
+  .sub{
+    font-size:15px;
+    color:#6b4b57;
+    margin:0 0 26px;
+    line-height:1.5;
+  }
+  .row{display:flex; gap:14px; margin-top:6px; position:relative; width:100%; justify-content:center; flex-wrap:wrap;}
+  button{
+    font-family:'Quicksand',sans-serif;
+    font-weight:600;
+    font-size:15px;
+    border:none;
+    border-radius:999px;
+    padding:13px 30px;
+    cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease, background .2s ease;
+  }
+  .btn-yes{
+    background:var(--rose);
+    color:#fff;
+    box-shadow:0 10px 20px -8px rgba(201,82,122,.7);
+  }
+  .btn-yes:hover{transform:translateY(-2px); background:var(--rose-deep);}
+  .btn-no{
+    background:transparent;
+    color:var(--rose-deep);
+    border:1.5px solid var(--line);
+    position:relative;
+  }
+  .btn-primary{
+    background:var(--rose);
+    color:#fff;
+    box-shadow:0 10px 20px -8px rgba(201,82,122,.7);
+    width:100%;
+    margin-top:10px;
+  }
+  .btn-primary:hover{transform:translateY(-2px); background:var(--rose-deep);}
+  .field{
+    width:100%;
+    text-align:left;
+    margin-bottom:16px;
+  }
+  .field label{
+    display:block;
+    font-size:12px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--rose-deep);
+    font-weight:600;
+    margin-bottom:6px;
+  }
+  .field input{
+    width:100%;
+    padding:12px 14px;
+    border-radius:14px;
+    border:1.5px solid var(--line);
+    background:#fff;
+    font-family:'Quicksand',sans-serif;
+    font-size:15px;
+    color:var(--plum);
+    outline:none;
+    transition:border-color .15s ease;
+  }
+  .field input:focus{border-color:var(--rose);}
+  .foods{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    width:100%;
+    margin-bottom:22px;
+  }
+  .food{
+    border:1.5px solid var(--line);
+    background:#fff;
+    border-radius:16px;
+    padding:12px 10px;
+    font-size:14px;
+    font-weight:600;
+    color:var(--plum);
+    cursor:pointer;
+    transition:all .15s ease;
+    user-select:none;
+  }
+  .food.selected{
+    background:var(--rose);
+    border-color:var(--rose);
+    color:#fff;
+    transform:scale(1.03);
+  }
+  .highlight{
+    font-weight:700;
+    color:var(--rose-deep);
+  }
+  .card-icon{
+    width:64px; height:44px;
+    border-radius:8px;
+    background:linear-gradient(135deg, var(--gold), #eec48a);
+    margin-bottom:18px;
+    position:relative;
+    box-shadow:0 8px 18px -8px rgba(217,160,102,.7);
+  }
+  .card-icon::after{
+    content:"";
+    position:absolute;
+    top:14px; left:0; right:0;
+    height:8px;
+    background:rgba(58,34,51,.35);
+  }
+  .fee{
+    font-size:13px;
+    color:var(--rose-deep);
+    font-weight:600;
+    margin-bottom:16px;
+  }
+  .amount-box{
+    width:100%;
+    border:1.5px dashed var(--rose);
+    border-radius:16px;
+    padding:16px;
+    margin-bottom:20px;
+    background:#fff6f8;
+  }
+  .amount-box .label{
+    font-size:11px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--rose-deep);
+    font-weight:700;
+    margin-bottom:4px;
+  }
+  .amount-box .amount{
+    font-family:'Cormorant Garamond', serif;
+    font-size:30px;
+    font-weight:600;
+    color:var(--plum);
+  }
+  .reveal{
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+  }
+  .reveal.show{display:flex;}
+  .prank-tag{
+    font-size:13px;
+    letter-spacing:.06em;
+    color:var(--rose);
+    font-weight:700;
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .final-line{
+    font-family:'Dancing Script', cursive;
+    font-size:30px;
+    font-weight:700;
+    color:var(--rose-deep);
+    line-height:1.4;
+    margin:14px 0 6px;
+  }
+  .take-care{
+    font-family:'Dancing Script', cursive;
+    font-size:24px;
+    color:var(--gold);
+    margin-top:4px;
+  }
+  .heart{color:var(--rose);}
+</style>
+</head>
+<body>
+
+<div class="stage">
+
+  <!-- PAGE 1 -->
+  <div class="page active" id="page1">
+    <div class="eyebrow">Hey, Rebuuu</div>
+    <div class="pic">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7.5-4.7-10-9.3C.5 8 2.5 4 6.5 4c2 0 3.5 1 5.5 3 2-2 3.5-3 5.5-3 4 0 6 4 4.5 7.7C19.5 16.3 12 21 12 21z" fill="#c9527a"/></svg>
+    </div>
+    <h1>Will you go on a date with me?</h1>
+    <p class="sub">As you know, I'm heading abroad very soon — so here's a little surprise before I go.</p>
+    <div class="row" id="row1">
+      <button class="btn-yes" onclick="goTo('page2')">Yes</button>
+      <button class="btn-no" id="noBtn">No</button>
+    </div>
+  </div>
+
+  <!-- PAGE 2 -->
+  <div class="page" id="page2">
+    <div class="pic">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7.5-4.7-10-9.3C.5 8 2.5 4 6.5 4c2 0 3.5 1 5.5 3 2-2 3.5-3 5.5-3 4 0 6 4 4.5 7.7C19.5 16.3 12 21 12 21z" fill="#c9527a"/></svg>
+    </div>
+    <h1>I was so ready for you to say no.</h1>
+    <button class="btn-primary" onclick="goTo('page3')">Okay</button>
+  </div>
+
+  <!-- PAGE 3 -->
+  <div class="page" id="page3">
+    <div class="eyebrow">Details</div>
+    <h1>So when are you free?</h1>
+    <div class="field">
+      <label for="dateInput">Pick a date</label>
+      <input type="date" id="dateInput">
+    </div>
+    <div class="field">
+      <label for="timeInput">Select a time</label>
+      <input type="time" id="timeInput">
+    </div>
+    <button class="btn-primary" onclick="handleSetDate()">Set the date ❤️</button>
+  </div>
+
+  <!-- PAGE 4 -->
+  <div class="page" id="page4">
+    <div class="eyebrow">One more thing</div>
+    <h1>What should we eat?</h1>
+    <p class="sub">Pick as many as you like — no rules here.</p>
+    <div class="foods" id="foods">
+      <div class="food" data-food="Pizza">Pizza</div>
+      <div class="food" data-food="Burger">Burger</div>
+      <div class="food" data-food="Biryani">Biryani</div>
+      <div class="food" data-food="Ice Cream">Ice Cream</div>
+      <div class="food" data-food="Cookies">Cookies</div>
+      <div class="food" data-food="Shake">Shake</div>
+      <div class="food" data-food="Pasta">Pasta</div>
+      <div class="food" data-food="Sushi">Sushi</div>
+      <div class="food" data-food="Fries">Fries</div>
+      <div class="food" data-food="Tacos">Tacos</div>
+      <div class="food" data-food="Coffee">Coffee</div>
+      <div class="food" data-food="Donuts">Donuts</div>
+    </div>
+    <button class="btn-primary" onclick="handleConfirmFoods()">Confirm</button>
+  </div>
+
+  <!-- PAGE WHERE -->
+  <div class="page" id="pageWhere">
+    <div class="eyebrow">Last question</div>
+    <h1>Fill in the blank</h1>
+    <p class="sub">I want to go <span class="highlight">______</span> with you.</p>
+    <div class="field">
+      <label for="whereInput">Type your answer</label>
+      <input type="text" id="whereInput" placeholder="">
+    </div>
+    <div class="field">
+      <label for="noteInput">Write me something sweet, just for us</label>
+      <input type="text" id="noteInput" placeholder="">
+    </div>
+    <button class="btn-primary" onclick="handleSetWhere()">Confirm</button>
+  </div>
+
+  <!-- PAGE 5 -->
+  <div class="page" id="page5">
+    <div class="eyebrow">Confirmed</div>
+    <h1>Glad you didn't say no.</h1>
+    <p class="sub">Be ready at <span class="highlight" id="summaryTime">--</span>, <span class="highlight" id="summaryDate">--</span>.<br>We're going <span class="highlight" id="summaryWhere">--</span>.<br>I'm coming to get you.</p>
+    <button class="btn-primary" onclick="goTo('page6')">Accept</button>
+  </div>
+
+  <!-- PAGE 6 : PRANK -->
+  <div class="page" id="page6">
+    <div id="prankForm">
+      <div class="card-icon"></div>
+      <div class="fee">A small fee applies 😉</div>
+      <h1>To confirm your acceptance of this date, please complete the following transaction 😏</h1>
+      <div class="amount-box">
+        <div class="label">Payment · Date Agreement</div>
+        <div class="amount">Rs 50,000</div>
+      </div>
+      <button class="btn-primary" onclick="showReveal()">Pay Rs 50,000 and Confirm</button>
+    </div>
+    <div class="reveal" id="reveal">
+      <div class="prank-tag">Relax</div>
+      <h1>This was a prank 😏</h1>
+      <p class="final-line" id="finalLine">Be ready at --, --.<br>I'm coming to get you.</p>
+      <p class="sub">Thank you for accepting it ♥</p>
+      <div class="take-care">Take care <span class="heart">♥</span></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function goTo(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// runaway "No" button — dodges sharply before it can ever be pressed
+const noBtn = document.getElementById('noBtn');
+const stageBox = document.querySelector('.stage');
+noBtn.style.position = 'relative';
+noBtn.style.transition = 'transform .12s cubic-bezier(.2,.8,.3,1)';
+
+function fleeNo(){
+  const stageRect = stageBox.getBoundingClientRect();
+  const btnRect = noBtn.getBoundingClientRect();
+  const padding = 20;
+  const maxX = (stageRect.width - btnRect.width) / 2 - padding;
+  const maxY = 90;
+  // pick a spot far from center, alternating sides so it feels sharp
+  const dirX = Math.random() > 0.5 ? 1 : -1;
+  const dirY = Math.random() > 0.5 ? 1 : -1;
+  const x = dirX * (maxX * (0.55 + Math.random()*0.45));
+  const y = dirY * (maxY * (0.5 + Math.random()*0.5));
+  noBtn.style.transform = `translate(${x}px, ${y}px)`;
+}
+
+// desktop: dodge the moment the cursor gets close, well before hover/click
+document.addEventListener('mousemove', function(e){
+  if(!document.getElementById('page1').classList.contains('active')) return;
+  const r = noBtn.getBoundingClientRect();
+  const cx = r.left + r.width/2;
+  const cy = r.top + r.height/2;
+  const dist = Math.hypot(e.clientX - cx, e.clientY - cy);
+  if(dist < 90) fleeNo();
+});
+noBtn.addEventListener('click', function(e){ e.preventDefault(); fleeNo(); });
+noBtn.addEventListener('mouseenter', fleeNo);
+// mobile: no hover exists, so dodge on touch before it can register as a tap
+noBtn.addEventListener('touchstart', function(e){ e.preventDefault(); fleeNo(); }, {passive:false});
+document.addEventListener('touchmove', function(e){
+  if(!document.getElementById('page1').classList.contains('active')) return;
+  const t = e.touches[0];
+  const r = noBtn.getBoundingClientRect();
+  const cx = r.left + r.width/2;
+  const cy = r.top + r.height/2;
+  const dist = Math.hypot(t.clientX - cx, t.clientY - cy);
+  if(dist < 100) fleeNo();
+});
+
+// date/time selection
+let chosenDate = '';
+let chosenTime = '';
+function formatDate(d){
+  if(!d) return '--';
+  const dt = new Date(d + 'T00:00:00');
+  return dt.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
+}
+function formatTime(t){
+  if(!t) return '--';
+  const [h,m] = t.split(':');
+  const hour = parseInt(h,10);
+  const ampm = hour >= 12 ? 'PM' : 'AM';
+  const h12 = ((hour+11)%12)+1;
+  return `${h12}:${m} ${ampm}`;
+}
+function handleSetDate(){
+  const d = document.getElementById('dateInput').value;
+  const t = document.getElementById('timeInput').value;
+  if(!d || !t){
+    alert('Pick a date and time first 🙂');
+    return;
+  }
+  chosenDate = formatDate(d);
+  chosenTime = formatTime(t);
+  document.getElementById('summaryDate').textContent = chosenDate;
+  document.getElementById('summaryTime').textContent = chosenTime;
+  goTo('page4');
+}
+
+// food selection
+document.querySelectorAll('.food').forEach(el=>{
+  el.addEventListener('click', ()=> el.classList.toggle('selected'));
+});
+
+let chosenFoods = [];
+function handleConfirmFoods(){
+  chosenFoods = Array.from(document.querySelectorAll('.food.selected')).map(el => el.dataset.food);
+  if(chosenFoods.length === 0){
+    alert('Pick at least one food first 🙂');
+    return;
+  }
+  goTo('pageWhere');
+}
+
+// where she wants to go
+let chosenWhere = '';
+let chosenNote = '';
+// TODO: paste your Formspree endpoint here, e.g. "https://formspree.io/f/xxxxxxx"
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/xyegpdel";
+async function handleSetWhere(){
+  const w = document.getElementById('whereInput').value.trim();
+  const n = document.getElementById('noteInput').value.trim();
+  if(!w || !n){
+    alert('Fill in both first 🙂');
+    return;
+  }
+  chosenWhere = w;
+  chosenNote = n;
+  document.getElementById('summaryWhere').textContent = chosenWhere;
+
+  const payload = {
+    date: chosenDate,
+    time: chosenTime,
+    foods: chosenFoods.length ? chosenFoods.join(', ') : 'no preference picked',
+    where: chosenWhere,
+    note: chosenNote
+  };
+  if(FORMSPREE_ENDPOINT){
+    try{
+      await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    }catch(err){
+      console.log('notification failed', err); // page still works even if this fails
+    }
+  }
+  goTo('page5');
+}
+
+// prank reveal
+function showReveal(){
+  document.getElementById('prankForm').style.display='none';
+  document.getElementById('reveal').classList.add('show');
+  document.getElementById('finalLine').innerHTML =
+    `Be ready at ${chosenTime}, ${chosenDate}.<br>We're going ${chosenWhere}.<br>I'm coming to get you.`;
+}
+</script>
+
+</body>
+</html>
